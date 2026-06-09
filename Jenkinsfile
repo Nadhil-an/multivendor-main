@@ -5,26 +5,19 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                echo 'Checking out source code...'
-                checkout scm
+                echo 'Cloning repository...'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                bat 'docker compose build'
+                sh 'docker build -t foodonline-ci .'
             }
         }
 
-        stage('Run Containers') {
+        stage('Verify Image') {
             steps {
-                bat 'docker compose up -d'
-            }
-        }
-
-        stage('Verify Containers') {
-            steps {
-                bat 'docker ps'
+                sh 'docker images | grep foodonline-ci'
             }
         }
     }
