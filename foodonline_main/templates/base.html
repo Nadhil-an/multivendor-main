@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>UniEats</title>
+
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,800">
+
+    <!-- Local CSS -->
+    <link rel="stylesheet" href="{% static 'css/iconmoon.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-slider.css' %}">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}?v=21">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="//cdn.datatables.net/2.3.5/css/dataTables.dataTables.min.css">
+
+    <!-- Google Maps API -->
+    {% if request.path == '/' or 'profile' in request.path %}
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_API_KEY }}&libraries=places&callback=initAutocomplete" async defer></script>
+    {% endif %}
+
+</head>
+
+<body>
+
+    {% include 'includes/navbar.html' %}
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    {% include 'includes/footer.html' %}
+
+    <!-- ================= JS FILES (CORRECT ORDER) ================= -->
+
+    <!-- jQuery (ONLY ONCE) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Popper.js (REQUIRED for Bootstrap tooltips) -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- DataTables JS -->
+    <script src="//cdn.datatables.net/2.3.5/js/dataTables.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const tableElement = document.querySelector('#datatable');
+            if (tableElement) {
+                new DataTable(tableElement);
+            }
+        });
+    </script>
+
+    <!-- Custom JS (ALWAYS LAST) -->
+    <script src="{% static 'js/custom.js' %}?v=1"></script>
+
+    {% block extra_js %}{% endblock %}
+
+</body>
+</html>

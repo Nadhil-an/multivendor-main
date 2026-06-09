@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="main-section">
+			<div class="page-section nopadding cs-nomargin" style="margin-top: 0px;padding-top: 60px;padding-bottom: 10px;margin-bottom: 0px;">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+							<div class="row">
+								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+									<div class="listing-sorting-holder" style="padding-bottom: 20px;">
+										<div class="row">
+											<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center text-md-left">
+												<h4 style="font-size: 28px; font-weight: 700; color: #1e293b;">{{ count }} Restaurants Found</h4>
+											</div>
+										</div>
+									</div>
+									
+									<div class="row">
+                                        {% for vend in vendors %}
+                                        <div class="col-lg-3 col-md-4 col-sm-6 col-6 mb-4">
+                                            <div class="modern-restaurant-card h-100">
+                                                <div class="img-holder">
+                                                    {% if vend.user_profile.profile_picture %}
+                                                        <a href="{% if vend.vendor_slug %}{% url 'vendor_details' vend.vendor_slug %}{% else %}#{% endif %}">
+                                                            <img src="{{ vend.user_profile.profile_picture.url }}" alt="">
+                                                        </a>
+                                                    {% else %}
+                                                        <a href="#">
+                                                            <!-- Fallback path matching modern black img -->
+                                                            <img src="{% static 'images/users/black.jpg' %}" alt="">
+                                                        </a>
+                                                    {% endif %}
+                                                    
+                                                    {% if vend.is_open %}
+                                                        <span class="modern-badge modern-badge-open">Open Now</span>
+                                                    {% else %}
+                                                        <span class="modern-badge modern-badge-closed">Closed</span>
+                                                    {% endif %}
+                                                </div>
+
+                                                <div class="modern-card-content">
+                                                    <h5 class="modern-card-title">
+                                                        <a href="{% if vend.vendor_slug %}{% url 'vendor_details' vend.vendor_slug %}{% else %}#{% endif %}">
+                                                            {{ vend.vendor_name }}
+                                                        </a>
+                                                    </h5>
+                                                    
+                                                    <div class="modern-card-footer mt-auto" style="border-top: 1px solid #f1f5f9; padding-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+                                                        <span></span>
+                                                        <a href="{% if vend.vendor_slug %}{% url 'vendor_details' vend.vendor_slug %}{% else %}#{% endif %}" class="btn" style="color: #d32323; font-weight: 600; padding: 0;">Explore Foods <i class="fa fa-angle-right"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+									</div>
+									
+								</div>
+								
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+{% endblock %}

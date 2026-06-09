@@ -1,0 +1,185 @@
+{% extends 'base.html'%}
+{% load static %}
+
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<div class="main-section" style="background: #ffffff; padding-bottom: 80px; font-family: 'Inter', sans-serif;">
+    {% include 'customer/cover.html'%}
+
+    <div class="page-section pt-5">
+        <div class="container">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-lg-3 col-md-4">
+                    {% include 'includes/c_sidebar.html' %}
+                </div>
+
+                <!-- Dashboard Content -->
+                <div class="col-lg-9 col-md-8">
+                    <div class="dashboard-content pl-lg-4">
+                        
+                        <!-- Header -->
+                        <div class="d-flex align-items-center justify-content-between mb-4 pb-2">
+                            <div>
+                                <h4 class="font-weight-bold mb-1" style="color: #1a1a1a; letter-spacing: -0.5px;">Dashboard Overview</h4>
+                                <p class="text-muted mb-0" style="font-size: 13px;">Welcome back, <strong>{{ user.first_name }}</strong></p>
+                            </div>
+                            <div class="d-none d-md-block">
+                                <span class="badge badge-pill px-3 py-2" style="background: #fdfdfd; border: 1px solid #f0f0f0; color: #666; font-weight: 600; font-size: 12px;">
+                                    <i class="far fa-calendar-alt mr-2"></i> {% now "jS F, Y" %}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Summary Cards -->
+                        <div class="row mb-5">
+                            <div class="col-md-5 mb-3">
+                                <div class="card card-modern h-100 overflow-hidden" style="border-radius: 24px; border: 1px solid #f1f5f9; background: #fff; transition: all 0.3s ease;">
+                                    <div class="card-body p-4 position-relative">
+                                        <div class="d-flex align-items-center mb-4">
+                                            <div class="icon-box mr-3" style="background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%); width: 42px; height: 42px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+                                                <i class="fas fa-shopping-bag" style="color: #e11d48; font-size: 16px;"></i>
+                                            </div>
+                                            <span class="text-muted font-weight-bold" style="letter-spacing: 0.5px; font-size: 11px; text-transform: uppercase;">Total Orders</span>
+                                        </div>
+                                        <div class="d-flex align-items-baseline">
+                                            <h3 class="font-weight-bold mb-0" style="color: #0f172a; font-size: 28px; letter-spacing: -1px;">{{ orders_count }}</h3>
+                                            <span class="ml-2 bg-success-light text-success font-weight-bold" style="font-size: 11px; padding: 2px 8px; border-radius: 6px; background: #f0fdf4;">+12%</span>
+                                        </div>
+                                        <!-- Decorative element -->
+                                        <div class="position-absolute" style="bottom: -20px; right: -20px; opacity: 0.03;">
+                                            <i class="fas fa-shopping-bag" style="font-size: 100px;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5 mb-3">
+                                <div class="card card-modern h-100 overflow-hidden" style="border-radius: 24px; border: 1px solid #f1f5f9; background: #fff; transition: all 0.3s ease;">
+                                    <div class="card-body p-4 position-relative">
+                                        <div class="d-flex align-items-center mb-4">
+                                            <div class="icon-box mr-3" style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); width: 42px; height: 42px; border-radius: 14px; display: flex; align-items: center; justify-content: center;">
+                                                <i class="fas fa-wallet" style="color: #10b981; font-size: 16px;"></i>
+                                            </div>
+                                            <span class="text-muted font-weight-bold" style="letter-spacing: 0.5px; font-size: 11px; text-transform: uppercase;">Total Spent</span>
+                                        </div>
+                                        <div class="d-flex align-items-baseline">
+                                            <h3 class="font-weight-bold mb-0" style="color: #0f172a; font-size: 28px; letter-spacing: -1px;">₹{{ total_spent|floatformat:0 }}</h3>
+                                            <span class="ml-2 bg-blue-light text-primary font-weight-bold" style="font-size: 11px; padding: 2px 8px; border-radius: 6px; background: #eff6ff;">Verified</span>
+                                        </div>
+                                        <!-- Decorative element -->
+                                        <div class="position-absolute" style="bottom: -20px; right: -20px; opacity: 0.03;">
+                                            <i class="fas fa-wallet" style="font-size: 100px;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Orders Activity Feed -->
+                        <div class="activity-section mb-5">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="font-weight-bold mb-0" style="color: #1e293b; font-size: 16px;">Recent Orders Activity</h6>
+                                <a href="{% url 'my_order' %}" class="btn-view-all">View All Orders <i class="fas fa-arrow-right ml-1"></i></a>
+                            </div>
+
+                            <div class="row">
+                                {% for order in recent_orders %}
+                                <div class="col-12 mb-3">
+                                    <div class="order-list-item d-flex align-items-center p-3" style="background: #fff; border: 1px solid #f1f5f9; border-radius: 20px; transition: all 0.2s;">
+                                        <div class="order-id-box mr-3" style="min-width: 120px;">
+                                            <span class="text-muted small d-block" style="font-size: 10px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Order ID</span>
+                                            <a href="{% url 'order_details' order.order_number %}" class="font-weight-bold text-dark" style="font-size: 13px; text-decoration: none;">#{{ order.order_number|truncatechars:12 }}</a>
+                                        </div>
+                                        <div class="order-name-box mr-4 flex-grow-1">
+                                            <span class="text-muted small d-block" style="font-size: 10px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Name</span>
+                                            <span style="font-size: 13px; color: #475569;">{{ order.name }}</span>
+                                        </div>
+                                        <div class="order-total-box mr-4 text-center" style="min-width: 80px;">
+                                            <span class="text-muted small d-block" style="font-size: 10px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Amount</span>
+                                            <span class="font-weight-bold" style="font-size: 14px; color: #0f172a;">₹{{ order.total|floatformat:0 }}</span>
+                                        </div>
+                                        <div class="order-status-box mr-4 text-center" style="min-width: 100px;">
+                                            <span class="status-badge status-{{ order.status|lower }}">{{ order.status }}</span>
+                                        </div>
+                                        <div class="order-date-box mr-4 text-center d-none d-md-block" style="min-width: 100px;">
+                                            <span class="text-muted small d-block" style="font-size: 10px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Date</span>
+                                            <span style="font-size: 12px; color: #64748b;">{{ order.created_at|date:"M d, Y" }}</span>
+                                        </div>
+                                        <div class="order-action-box">
+                                            <a href="{% url 'order_details' order.order_number %}" class="btn-action-round">
+                                                <i class="fas fa-chevron-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% empty %}
+                                <div class="col-12 py-5 text-center" style="background: #f8fafc; border: 2px dashed #e2e8f0; border-radius: 24px;">
+                                    <div class="text-muted font-weight-bold">No recent orders found</div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card-modern:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.05) !important;
+        border-color: #d3232355 !important;
+    }
+    .order-list-item:hover {
+        background: #fdfdfd !important;
+        border-color: #e2e8f0 !important;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+    }
+    .btn-view-all {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #d32323;
+        text-decoration: none !important;
+        letter-spacing: 0.5px;
+        transition: all 0.3s;
+    }
+    .btn-view-all:hover { opacity: 0.7; transform: translateX(3px); }
+    
+    .status-badge {
+        padding: 5px 12px;
+        border-radius: 8px;
+        font-size: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .status-completed { background: #f0fdf4; color: #10b981; }
+    .status-pending { background: #fffbeb; color: #f59e0b; }
+    .status-cancelled { background: #fef2f2; color: #ef4444; }
+    .status-new { background: #eff6ff; color: #3b82f6; }
+    
+    .btn-action-round {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: #f8fafc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #64748b;
+        text-decoration: none !important;
+        border: 1px solid #f1f5f9;
+        transition: all 0.3s;
+    }
+    .btn-action-round:hover {
+        background: #d32323;
+        color: #fff;
+        border-color: #d32323;
+        transform: rotate(-10deg);
+    }
+</style>
+{% endblock %}

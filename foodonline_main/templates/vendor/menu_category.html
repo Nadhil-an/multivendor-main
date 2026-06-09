@@ -1,0 +1,116 @@
+{% load static %}
+{% include 'v_base.html' %}
+
+<body style="background: #f8fafc; font-family: 'Inter', sans-serif;">
+
+<div class="container-fluid py-5">
+    <div class="row g-0">
+        <!-- Sidebar -->
+        <div class="col-lg-2 col-md-3">
+            {% include 'includes/v_sidebar.html' %}
+        </div>
+
+        <!-- RIGHT CONTENT -->
+        <div class="col-lg-10 col-md-9">
+            <div class="content px-4">
+
+                <!-- TOP BAR -->
+                <div class="d-flex justify-content-between align-items-center mb-5 pb-2 border-bottom"
+                    style="border-color: #e2e8f0 !important;">
+                    <div>
+                        <h3 class="font-weight-bold mb-1" style="color: #0f172a; letter-spacing: -1px;">Category Items</h3>
+                        <p class="text-muted mb-0" style="font-size: 14px;">Manage food items in this category</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                         <a href="{% url 'menu_builder' %}" class="btn btn-sm btn-light shadow-sm"
+                            style="border-radius: 10px; font-weight: 600; font-size: 11px; padding: 8px 15px;">
+                            <i class="fa fa-angle-left mr-2"></i> Back to Builder
+                        </a>
+                        <a href="{% url 'addfood' %}" class="btn btn-sm btn-dark shadow-sm ml-2"
+                            style="border-radius: 10px; font-weight: 600; font-size: 11px; padding: 8px 15px;">
+                            <i class="fa fa-plus mr-2"></i> Add Food
+                        </a>
+                    </div>
+                </div>
+
+                <!-- MAIN CARD -->
+                <div class="card card-modern p-0 shadow-sm overflow-hidden">
+                    <div class="p-4 border-bottom bg-white">
+                         <h5 class="font-weight-bold mb-0" style="color: #1e293b; letter-spacing: -0.5px;">Food List</h5>
+                    </div>
+
+                    {% if fooditems %}
+                    <div class="table-responsive">
+                        <table class="table table-clean mb-0">
+                            <thead>
+                                <tr>
+                                    <th width="80">#</th>
+                                    <th width="100">Image</th>
+                                    <th>Food Item</th>
+                                    <th>Availability</th>
+                                    <th class="text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for food in fooditems %}
+                                <tr>
+                                    <td class="text-muted small">0{{ forloop.counter }}</td>
+                                    <td>
+                                        <img src="{{ food.image.url }}" 
+                                             class="rounded-3 shadow-sm"
+                                             style="width: 50px; height: 50px; object-fit: cover; border: 2px solid #fff;">
+                                    </td>
+                                    <td>
+                                        <div class="font-weight-bold" style="color: #0f172a;">{{ food }}</div>
+                                        <div class="text-muted small text-truncate" style="max-width: 300px;">{{ food.description }}</div>
+                                    </td>
+                                    <td>
+                                        {% if food.is_available %}
+                                            <span class="badge" style="background: #f0fdf4; color: #16a34a; padding: 6px 12px; border-radius: 8px; font-weight: 700;">Available</span>
+                                        {% else %}
+                                            <span class="badge" style="background: #fff1f2; color: #e11d48; padding: 6px 12px; border-radius: 8px; font-weight: 700;">Unavailable</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-right">
+                                        <div class="d-flex justify-content-end gap-3 px-3">
+                                            <a href="{% url 'edit_food' food.id %}" class="text-primary" title="Edit">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                            <a href="{% url 'delete_food' food.id %}" 
+                                               class="text-danger ml-3"
+                                               onclick="return confirm('Are you sure you want to delete this item?');"
+                                               title="Delete">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <!-- EMPTY STATE -->
+                    <div class="text-center py-5">
+                        <div class="mb-4">
+                            <span class="p-4 rounded-circle bg-light d-inline-block">
+                                <i class="fa-solid fa-utensils text-muted" style="font-size: 32px;"></i>
+                            </span>
+                        </div>
+                        <h5 class="fw-bold" style="color: #0f172a;">No Food Items Found</h5>
+                        <p class="text-muted small mb-4">You haven't added any dishes to this category yet.</p>
+                        <a href="{% url 'addfood' %}" class="btn btn-danger font-weight-bold" style="border-radius: 10px; background: #ef4444; border: none; padding: 8px 20px; font-size: 13px;">
+                            <i class="fa fa-plus mr-2"></i> Add Your First Food
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+</html>

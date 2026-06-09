@@ -1,0 +1,66 @@
+{% load static %}
+
+<!-- ================= Header Start ================= -->
+<header id="header" class="main-header">
+    <div class="container-fluid px-lg-5">
+        <div class="row align-items-center py-2">
+
+            <!-- Logo -->
+            <div class="col-lg-3 col-md-4 col-6">
+                <a href="{% url 'home' %}" class="logo">
+                    <img src="{% static 'logo/unieats_logo.png' %}" alt="UniEats Logo" height="65">
+                </a>
+            </div>
+
+            <!-- Navigation -->
+            <div class="col-lg-9 col-md-8 col-6 d-flex justify-content-end align-items-center">
+
+                <div class="nav-right d-flex align-items-center">
+
+                    <!-- Food Stalls -->
+                    <a href="{% url 'marketplace' %}" class="clean-nav-link d-none d-lg-flex text-uppercase font-weight-bold mx-3" style="font-size: 13px; letter-spacing: 0.5px; color: #333; text-decoration: none;">Food Stalls</a>
+
+                    {% if user.is_authenticated %}
+
+                        <!-- User Account Links -->
+                        <a href="{% url 'customerDashboard' %}" class="clean-nav-link d-none d-lg-flex text-uppercase font-weight-bold mx-3" style="font-size: 13px; letter-spacing: 0.5px; color: #333; text-decoration: none;">My Account</a>
+                        
+                        {% if user.role == 2 %}
+                        <a href="{% url 'order_status' %}" class="clean-nav-btn-solid text-uppercase font-weight-bold ml-3" style="background: #d32323; color: #fff; padding: 10px 20px; border-radius: 12px; font-size: 12px; text-decoration: none;">
+                            <i class="fas fa-clock mr-1"></i> Order Status
+                        </a>
+                        {% endif %}
+
+                        <!-- Cart Button -->
+                        <a href="{% url 'cart' %}" class="my-cart-btn px-4 py-2 ml-3 d-flex align-items-center" style="background: #e9e9e9; border-radius: 12px; text-decoration: none; transition: all 0.3s; opacity: 1;">
+                            <i class="fas fa-shopping-cart" style="color: #444; font-size: 18px;"></i>
+                            <span class="ml-2 font-weight-bold d-none d-sm-inline" style="color: #444; font-size: 14px; letter-spacing: 0.3px;">My Cart</span>
+                            {% if cart_count > 0 %}
+                                <span id="cart_counter" class="badge badge-pill badge-danger ml-2" style="font-size: 10px; padding: 3px 6px;">{{ cart_count }}</span>
+                            {% endif %}
+                        </a>
+
+                    {% else %}
+
+                        <!-- Login / Register -->
+                        <div class="auth-links mx-3">
+                            <a href="{% url 'loginUser' %}" class="login-link text-uppercase font-weight-bold" style="font-size: 13px; color: #333; text-decoration: none;">Login</a>
+                            <span class="mx-1">/</span>
+                            <a href="{% url 'registerUser' %}" class="register-link text-uppercase font-weight-bold" style="font-size: 13px; color: #333; text-decoration: none;">Register</a>
+                        </div>
+
+                        <!-- Register Restaurant -->
+                        <a href="{% url 'registerVendor' %}" class="clean-nav-btn-solid text-uppercase font-weight-bold ml-3" style="background: #d32323; color: #fff; padding: 10px 20px; border-radius: 12px; font-size: 12px; text-decoration: none;">
+                            Register Restaurant
+                        </a>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</header>
+<!-- ================= Header End ================= -->

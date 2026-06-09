@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<div class="main-section" style="background: #f8fafc; min-height: 100vh; padding: 30px 0; font-family: 'Inter', sans-serif;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-11">
+                <!-- Main Receipt Card -->
+                <div class="receipt-card bg-white shadow-sm" style="border-radius: 20px; border: 1px solid #e2e8f0; overflow: hidden;">
+                    
+                    <!-- Header with Branding -->
+                    <div class="p-4 text-center border-bottom" style="background: #ffffff;">
+                        <img src="{% static 'logo/unieats_logo.png' %}" width="200" class="mb-3" alt="UniEats Logo">
+                        <div class="status-badge-wrapper mt-1">
+                            <span class="badge badge-pill px-3 py-1" style="background: #ecfdf5; color: #10b981; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">
+                                <i class="fas fa-check-circle mr-1"></i> Payment Successful
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="p-4">
+                        <!-- Heading & Address Section -->
+                        <div class="row mb-4">
+                            <div class="col-md-7">
+                                <h4 class="font-weight-bold mb-1" style="color: #1a1a1a; letter-spacing: -0.5px;">Thank you for your order!</h4>
+                                <p class="text-muted mb-0 small" style="font-size: 13px;">Confirmation sent to <strong>{{ order.email }}</strong></p>
+                            </div>
+                            <div class="col-md-5 text-md-right mt-3 mt-md-0">
+                                <h6 class="font-weight-bold mb-0" style="color: #111; font-size: 14px;">Ship to:</h6>
+                                <p class="text-muted mb-0 small" style="line-height: 1.4; font-size: 12px;">
+                                    <strong>{{ order.name }}</strong><br>
+                                    {{ order.address }}<br>
+                                    <i class="fas fa-phone-alt mr-1 small"></i> {{ order.phone }}
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Order Meta Info -->
+                        <div class="order-meta-box p-3 mb-4" style="background: #fdfdfd; border: 1px solid #f1f5f9; border-radius: 12px;">
+                            <div class="row text-center">
+                                <div class="col-md-3 col-6 mb-2 mb-md-0 border-right">
+                                    <span class="text-muted small text-uppercase font-weight-bold d-block mb-0" style="letter-spacing: 0.5px; font-size: 10px;">Date</span>
+                                    <span class="font-weight-bold small" style="color: #1a1a1a;">{{ order.created_at|date:"d M Y" }}</span>
+                                </div>
+                                <div class="col-md-3 col-6 mb-2 mb-md-0 border-right">
+                                    <span class="text-muted small text-uppercase font-weight-bold d-block mb-0" style="letter-spacing: 0.5px; font-size: 10px;">Order #</span>
+                                    <span class="font-weight-bold small" style="color: #1a1a1a;">#{{ order.order_number }}</span>
+                                </div>
+                                <div class="col-md-3 col-6 border-right">
+                                    <span class="text-muted small text-uppercase font-weight-bold d-block mb-0" style="letter-spacing: 0.5px; font-size: 10px;">Payment</span>
+                                    <span class="font-weight-bold small" style="color: #1a1a1a;">{{ order.payment_method }}</span>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <span class="text-muted small text-uppercase font-weight-bold d-block mb-0" style="letter-spacing: 0.5px; font-size: 10px;">Transaction ID</span>
+                                    <span class="font-weight-bold small text-truncate d-block px-1" style="color: #1a1a1a; font-size: 10px;">{{ order.payment.transaction_id|default:"N/A" }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Items Table -->
+                        <div class="table-responsive mb-4">
+                            <table class="table custom-order-table mb-0">
+                                <thead style="background: #f8fafc;">
+                                    <tr>
+                                        <th class="border-0 py-2 pl-3" style="color: #64748b; font-size: 11px; font-weight: 700; text-transform: uppercase;">Image</th>
+                                        <th class="border-0 py-2" style="color: #64748b; font-size: 11px; font-weight: 700; text-transform: uppercase;">Food Item</th>
+                                        <th class="border-0 py-2 text-center" style="color: #64748b; font-size: 11px; font-weight: 700; text-transform: uppercase;">Qty</th>
+                                        <th class="border-0 py-2 text-right pr-3" style="color: #64748b; font-size: 11px; font-weight: 700; text-transform: uppercase;">Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in ordered_food %}
+                                    <tr>
+                                        <td class="py-2 pl-3 align-middle">
+                                            <div style="width: 45px; height: 45px; border-radius: 8px; overflow: hidden; border: 1px solid #f1f5f9;">
+                                                <img src="{{ item.fooditem.image.url }}" style="width: 100%; height: 100%; object-fit: cover;" alt="{{ item.fooditem }}">
+                                            </div>
+                                        </td>
+                                        <td class="py-2 align-middle">
+                                            <h6 class="font-weight-bold mb-0" style="color: #1a1a1a; font-size: 13px;">{{ item.fooditem }}</h6>
+                                            <p class="text-muted mb-0" style="font-size: 10px;"><i class="fas fa-store mr-1"></i> {{ item.fooditem.vendor.vendor_name }}</p>
+                                        </td>
+                                        <td class="py-2 align-middle text-center font-weight-bold small" style="color: #1a1a1a;">{{ item.quantity }}</td>
+                                        <td class="py-2 align-middle text-right pr-3 font-weight-bold small" style="color: #1a1a1a;">₹{{ item.fooditem.price|floatformat:0 }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Total Section -->
+                        <div class="row justify-content-end mb-3">
+                            <div class="col-md-5">
+                                <div class="p-3" style="background: #f8fafc; border-radius: 12px;">
+                                    <div class="d-flex justify-content-between align-items-center mb-0">
+                                        <span class="font-weight-bold mb-0" style="color: #1a1a1a; font-size: 15px;">Grand Total</span>
+                                        <span class="font-weight-bold mb-0" style="color: #d32323; font-size: 18px;">₹{{ order.total|floatformat:0 }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4" style="border-top: 1px dashed #f1f5f9;">
+
+                        <!-- Footer Info -->
+                        <div class="row align-items-center">
+                            <div class="col-md-6 mb-2 mb-md-0">
+                                <p class="mb-0 small" style="color: #1a1a1a;"><strong>Need help?</strong> <a href="tel:+910001234232" style="color: #d32323; text-decoration: none; margin-left: 5px;">+91 0001234232</a></p>
+                            </div>
+                            <div class="col-md-6 text-md-right">
+                                <p class="mb-0 text-muted" style="font-size: 11px;">Thanks for choosing <strong>UniEats</strong>!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-3 no-print">
+                    <a href="{% url 'customerDashboard' %}" class="btn btn-outline-secondary px-3 py-1" style="border-radius: 8px; font-weight: 600; font-size: 13px;">
+                        <i class="fas fa-arrow-left mr-1"></i> Dashboard
+                    </a>
+                    <button onclick="window.print()" class="btn btn-danger ml-2 px-3 py-1" style="border-radius: 8px; font-weight: 600; font-size: 13px; background: #d32323; border: none;">
+                        <i class="fas fa-print mr-1"></i> Print
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .custom-order-table tbody tr {
+        border-bottom: 1px solid #f1f5f9;
+    }
+    .custom-order-table tbody tr:last-child {
+        border-bottom: none;
+    }
+    @media print {
+        .main-section { padding: 0 !important; background: white !important; }
+        .receipt-card { border: none !important; box-shadow: none !important; }
+        .no-print { display: none; }
+    }
+</style>
+{% endblock %}

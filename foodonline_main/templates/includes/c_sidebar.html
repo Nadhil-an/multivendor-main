@@ -1,0 +1,119 @@
+<style>
+    .user-nav-card {
+        background: #fff;
+        border-radius: 24px;
+        padding: 20px;
+        border: 1px solid #f1f5f9;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+    }
+    .user-nav-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .user-nav-list li {
+        margin-bottom: 6px;
+    }
+    .user-nav-list li a {
+        display: flex;
+        align-items: center;
+        padding: 14px 18px;
+        border-radius: 16px;
+        color: #64748b;
+        font-weight: 600;
+        font-size: 13px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        text-decoration: none;
+    }
+    .user-nav-list li a i {
+        font-size: 15px;
+        width: 24px;
+        margin-right: 12px;
+        opacity: 0.6;
+        transition: all 0.3s;
+    }
+    .user-nav-list li a:hover {
+        background: #f8fafc;
+        color: #1e293b;
+        transform: translateX(4px);
+    }
+    .user-nav-list li a:hover i {
+        opacity: 1;
+        color: #d32323;
+    }
+    .user-nav-list li.active a {
+        background: #d32323;
+        color: #ffffff !important;
+        box-shadow: 0 10px 25px rgba(211, 35, 35, 0.2);
+    }
+    .user-nav-list li.active a i {
+        opacity: 1;
+        color: #ffffff;
+    }
+    .logout-btn-item {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px dashed #f1f5f9;
+    }
+    .logout-btn-item a {
+        color: #ef4444 !important;
+    }
+    .logout-btn-item a:hover {
+        background: #fef2f2 !important;
+        color: #b91c1c !important;
+    }
+</style>
+
+<div class="user-nav-card">
+    <ul class="user-nav-list">
+        <li class="{% if request.resolver_match.url_name == 'customerDashboard' %}active{% endif %}">
+            <a href="{% url 'customerDashboard' %}">
+                <i class="fas fa-th-large"></i> Dashboard
+            </a>
+        </li>
+        <li class="{% if request.resolver_match.url_name == 'my_order' or request.resolver_match.url_name == 'order_details' %}active{% endif %}">
+            <a href="{% url 'my_order' %}">
+                <i class="fas fa-shopping-bag"></i> My Orders
+            </a>
+        </li>
+        <li class="{% if request.resolver_match.url_name == 'cprofile' %}active{% endif %}">
+            <a href="{% url 'cprofile' %}">
+                <i class="fas fa-user-circle"></i> Profile Settings
+            </a>
+        </li>
+        <li class="{% if request.resolver_match.url_name == 'forgotpassword' %}active{% endif %}">
+            <a href="{% url 'forgotpassword' %}">
+                <i class="fas fa-key"></i> Change Password
+            </a>
+        </li>
+        <li class="logout-btn-item">
+            <a href="javascript:void(0)" onclick="handleLogout()">
+                <i class="fas fa-sign-out-alt"></i> Sign Out
+            </a>
+        </li>
+    </ul>
+</div>
+
+<script>
+function handleLogout() {
+    Swal.fire({
+        title: 'Sign Out?',
+        text: "Are you sure you want to end your session?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d32323',
+        cancelButtonColor: '#f1f5f9',
+        confirmButtonText: 'Yes, sign me out',
+        cancelButtonText: 'No, stay',
+        customClass: {
+            confirmButton: 'rounded-pill px-4 py-2 font-weight-bold',
+            cancelButton: 'rounded-pill px-4 py-2 font-weight-bold text-dark border-0',
+            popup: 'rounded-24'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = "{% url 'logout' %}";
+        }
+    })
+}
+</script>

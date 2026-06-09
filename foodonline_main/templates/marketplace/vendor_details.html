@@ -1,0 +1,233 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load marketplace_extras %}
+{% block content %}
+
+<div class="main-section">
+
+    <!-- HEADER -->
+    <div class="page-section restaurant-detail-image-section"
+         style="background: url('{% if vendor.user_profile.cover_photo %}{{ vendor.user_profile.cover_photo.url }}{% else %}{% static 'images/black.jpg' %}{% endif %}') no-repeat center center/cover; background-attachment: fixed;">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="company-info-detail">
+
+                        <div class="company-info" style="min-height: 100px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                            <!-- Restaurant Name Removed as requested -->
+                        </div>
+
+                        <div class="delivery-timing reviews-sortby" style="background: rgba(255,255,255,0.9); padding: 10px 20px; border-radius: 30px; display: inline-block; margin: 20px auto; border: 1px solid #ddd;">
+                            {% if opening_hours %}
+                                <div style="font-size: 14px; font-weight: 700; color: #333;">
+                                    <i class="icon-clock" style="color: #d32323; margin-right: 5px;"></i>
+                                    <span>Today :</span>
+                                    {% if current_opening_hours %}
+                                        {% for hour in current_opening_hours %}
+                                            <span style="color: #d32323;">
+                                            {% if hour.is_closed %}Closed{% else %}{{ hour.from_hour }} - {{ hour.to_hour }}{% endif %}
+                                            </span>
+                                        {% endfor %}
+                                    {% else %}
+                                        <span style="color: #d32323;">Closed</span>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- MENU SECTION -->
+    <div class="page-section">
+        <div class="container-fluid" style="padding: 0 4%;">
+            <div class="row">
+
+                {% if vendor.is_open%}
+
+                <!-- CATEGORY LIST -->
+                <div class="col-lg-2 col-md-3 col-sm-4 col-xs-12 sticky-sidebar mt-4">
+                    <div class="clean-sidebar-container shadow-sm border">
+                        <h6 class="clean-sidebar-title">Categories</h6>
+                        <ul class="clean-sidebar-list">
+                            <li>
+                                <a href="{% url 'vendor_details' vendor.vendor_slug %}" 
+                                   class="clean-sidebar-link {% if not selected_category %}active{% endif %}">
+                                    All Dishes
+                                </a>
+                            </li>
+                            {% for cat in categories %}
+                            <li>
+                                <a href="{% url 'vendor_details_by_category' vendor.vendor_slug cat.slug%}" 
+                                   class="clean-sidebar-link {% if selected_category.id == cat.id %}active{% endif %}">
+                                    {{ cat.category_name }}
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- MENU ITEMS -->
+                <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+                    <div class="tabs-holder horizontal">
+                        
+                        <div class="tab-content">
+                            <div id="home" class="tab-pane in active">
+                                <div class="menu-itam-holder">
+
+
+                                    {% if selected_category %}
+
+                                    <div class="menu-itam-list">
+
+                                         
+                                         <div class="clean-category-header">
+                                            <h4 class="clean-category-name">{% if selected_category %}{{ selected_category.category_name }}{% else %}{{ cat.category_name }}{% endif %}</h4>
+                                        </div>
+
+                                        <ul class="blinkit-grid">
+                                            {% for food in foods %}
+                                            <li class="blinkit-card">
+                                                <div class="blinkit-img-container">
+                                                    <img src="{{ food.image.url }}" alt="{{ food.food_title }}" class="blinkit-img">
+                                                </div>
+                                                
+                                                <h6 class="blinkit-title">{{ food.food_title }}</h6>
+                                                <p class="blinkit-desc">{{ food.description }}</p>
+                                                
+                                                <div class="blinkit-footer">
+                                                    <div class="blinkit-price-container">
+                                                        <span class="blinkit-price">₹{{ food.price|floatformat:0 }}</span>
+                                                    </div>
+
+                                                    <div class="blinkit-action-wrapper" id="action-wrapper-{{ food.id }}">
+                                                        {% with qty=cart_items_dict|get_item:food.id %}
+                                                            <a href="#" 
+                                                               class="blinkit-add-btn add_to_cart {% if qty and qty > 0 %}blinkit-added{% endif %}" 
+                                                               id="add-btn-{{ food.id }}" 
+                                                               data-id="{{ food.id }}" 
+                                                               data-url="{% url 'add_to_cart' food.id %}">
+                                                                {% if qty and qty > 0 %}Added to Cart{% else %}ADD{% endif %}
+                                                            </a>
+                                                        {% endwith %}
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+
+                                    </div>
+
+                                     {% else %} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    
+
+                                    {% for cat, foods in category_with_food.items %}
+                                    <div class="menu-itam-list">
+
+                                       
+                                         <div class="clean-category-header">
+                                            <h4 class="clean-category-name">{{ cat.category_name }}</h4>
+                                        </div> 
+
+                                        <ul class="blinkit-grid">
+                                            {% for food in foods %}
+                                            <li class="blinkit-card">
+                                                <div class="blinkit-img-container">
+                                                    <img src="{{ food.image.url }}" alt="{{ food.food_title }}" class="blinkit-img">
+                                                </div>
+                                                
+                                                <h6 class="blinkit-title">{{ food.food_title }}</h6>
+                                                <p class="blinkit-desc">{{ food.description }}</p>
+                                                
+                                                <div class="blinkit-footer">
+                                                    <div class="blinkit-price-container">
+                                                        <span class="blinkit-price">₹{{ food.price|floatformat:0 }}</span>
+                                                    </div>
+
+                                                    <div class="blinkit-action-wrapper" id="action-wrapper-{{ food.id }}">
+                                                        {% with qty=cart_items_dict|get_item:food.id %}
+                                                            <a href="#" 
+                                                               class="blinkit-add-btn add_to_cart {% if qty and qty > 0 %}blinkit-added{% endif %}" 
+                                                               id="add-btn-{{ food.id }}" 
+                                                               data-id="{{ food.id }}" 
+                                                               data-url="{% url 'add_to_cart' food.id %}">
+                                                                {% if qty and qty > 0 %}Added to Cart{% else %}ADD{% endif %}
+                                                            </a>
+                                                        {% endwith %}
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+
+                                    </div>
+                                    {% endfor %}
+                                    {% endif %} 
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div> 
+
+            </div>
+            {% else %}
+
+            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12 d-flex justify-content-center align-items-center closed">
+                <div class="closed-box text-center">
+                    <h4 class="mb-3 text-danger">Shop is Closed</h4>
+                    <p class="text-muted mb-4">
+                        This restaurant is currently not accepting orders.
+                        Please check back later or explore other nearby restaurants.
+                    </p>
+                    <a href="{% url 'marketplace' %}" class="btn btn-outline-danger">
+                        Explore More Restaurants
+                    </a>
+                </div>
+            </div>
+
+
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+
+
+
+
+
+
+
+

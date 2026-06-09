@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<div class="d-flex align-items-center justify-content-center" style="min-height: 80vh; background: #fff; font-family: 'Inter', sans-serif;">
+    <div class="text-center px-4" style="max-width: 600px;">
+        <div class="mb-5">
+            <span class="d-inline-block px-4 py-2 mb-4" style="background: #fff5f5; color: #d32323; border-radius: 100px; font-weight: 700; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase;">
+                Error Encountered
+            </span>
+            <h1 class="display-1 font-weight-extrabold mb-0" style="color: #1a1a1a; letter-spacing: -4px; line-height: 1;">403</h1>
+            <p class="h4 font-weight-bold mt-4 mb-2" style="color: #333; letter-spacing: -0.5px;">Oops! Page access restricted.</p>
+            <p class="text-muted mb-5" style="font-size: 16px;">The page you are looking for might have vanished or you don't have the permissions to view it right now.</p>
+        </div>
+        
+        <div class="d-flex flex-column flex-md-row justify-content-center gap-3 align-items-center">
+            <a href="{% url 'home' %}" class="btn btn-danger px-5 py-3 font-weight-bold shadow-sm" style="border-radius: 16px; background: #d32323; border: none; letter-spacing: 0.5px; transition: all 0.3s; width: 220px;">
+                Back to Home <i class="fas fa-home ml-2" style="font-size: 12px;"></i>
+            </a>
+            <a href="javascript:history.back()" class="btn btn-link text-muted mt-3 mt-md-0 font-weight-bold" style="text-decoration: none; font-size: 14px;">
+                <i class="fas fa-arrow-left mr-2"></i> Go Back
+            </a>
+        </div>
+
+        <div class="mt-5 pt-5 opacity-50">
+            <img src="{% static 'logo/unieats_logo.png' %}" width="180" style="filter: grayscale(1);">
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn-danger:hover {
+        background: #b51d1d !important;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(211, 35, 35, 0.15) !important;
+    }
+</style>
+{% endblock %}

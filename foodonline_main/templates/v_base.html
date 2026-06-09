@@ -1,0 +1,181 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>UniEats - Vendor Dashboard</title>
+
+	<!-- Google Fonts -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,800">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+	<!-- ================= CSS ================= -->
+	<link href="{% static 'css/iconmoon.css' %}" rel="stylesheet">
+	<link href="{% static 'css/style.css' %}" rel="stylesheet">
+	<link href="{% static 'css/cs-foodbakery-plugin.css' %}" rel="stylesheet">
+	<link href="{% static 'css/bootstrap-slider.css' %}" rel="stylesheet">
+	<link href="{% static 'css/custom.css' %}" rel="stylesheet">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+	<!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+	<!-- jQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+	<!-- Bootstrap JS -->
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+	<!-- SweetAlert2 -->
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- DataTables -->
+	<link rel="stylesheet" href="//cdn.datatables.net/2.3.5/css/dataTables.dataTables.min.css">
+	<script src="//cdn.datatables.net/2.3.5/js/dataTables.min.js"></script>
+	
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+            if (document.getElementById('datatable')) {
+                let table = new DataTable('#datatable', {
+                    "language": {
+                        "search": "",
+                        "searchPlaceholder": "Search orders..."
+                    }
+                });
+            }
+        });
+	</script>
+
+	 <!-- JS -->
+    <script src="{% static 'js/modernizr.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+
+    <!-- Custom Global Styles -->
+	<style>
+		body {
+			background-color: #f8fafc !important;
+			overflow-x: hidden;
+            font-family: 'Inter', sans-serif !important;
+		}
+
+		/* Global Scrollbar Hiding */
+		::-webkit-scrollbar {
+			display: none;
+		}
+		* {
+			-ms-overflow-style: none;  /* IE and Edge */
+			scrollbar-width: none;  /* Firefox */
+		}
+
+        /* Full Width Utilities */
+        .container-full {
+            width: 100% !important;
+            max-width: 100% !important;
+            padding-left: 30px !important;
+            padding-right: 30px !important;
+        }
+
+        /* Sidebar Adjustments */
+    .sidebar {
+        background: #fff;
+        height: 100vh;
+        border-right: 1px solid #f1f5f9;
+        padding: 20px 15px;
+        position: sticky;
+        top: 0;
+    }
+
+    .sidebar-logo {
+        padding: 0 10px 40px 10px;
+    }
+
+    .sidebar-nav {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .sidebar-link {
+        display: flex;
+        align-items: center;
+        padding: 12px 15px;
+        color: #64748b;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 13px;
+        border-radius: 12px;
+        margin-bottom: 5px;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    }
+        .sidebar-menu .nav-link i {
+            font-size: 16px !important;
+            width: 24px;
+        }
+        .sidebar-menu .nav-item.active .nav-link,
+        .sidebar-menu .nav-link:hover {
+            background-color: #ef4444 !important; /* Premium Red */
+            color: #ffffff !important;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2) !important;
+        }
+        .sidebar-menu .nav-item.active .nav-link i,
+        .sidebar-menu .nav-link:hover i {
+            color: #ffffff !important;
+        }
+
+        .logout-btn .nav-link {
+            color: #ef4444 !important;
+        }
+        .logout-btn .nav-link:hover {
+            background: #fef2f2 !important;
+            color: #ef4444 !important;
+            box-shadow: none !important;
+        }
+
+		.card-modern {
+			border: 1px solid #f1f5f9 !important;
+			border-radius: 20px !important;
+			background: #fff !important;
+			box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03) !important;
+			transition: all 0.3s ease;
+		}
+		
+		.table-clean thead th {
+			border: none !important;
+			color: #64748b !important;
+			font-size: 11px !important;
+			text-transform: uppercase !important;
+			letter-spacing: 0.5px !important;
+			padding: 15px 20px !important;
+		}
+		.table-clean tbody tr td {
+			border: none !important;
+			padding: 15px 20px !important;
+			vertical-align: middle !important;
+		}
+        
+        /* Modern DataTables Styling */
+        .dt-search {
+            margin-bottom: 20px !important;
+        }
+        .dt-search input {
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 10px !important;
+            padding: 8px 15px !important;
+            font-size: 13px !important;
+            outline: none !important;
+            width: 250px !important;
+            background: #f8fafc !important;
+        }
+        .dt-search input:focus {
+            background: #fff !important;
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+        }
+	</style>
+</head>

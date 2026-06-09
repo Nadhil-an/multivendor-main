@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main-section" style="background: #f8f9fa; padding-bottom: 60px;">
+    <div class="page-section pt-5">
+        <div class="container">
+            <div class="row">
+                <!-- Cart Items Section -->
+                <div class="col-lg-8 col-md-12">
+                    <div class="cart-items-container bg-white p-4" style="border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid #eee;">
+                        <div class="d-flex align-items-center mb-4 pb-2 border-bottom">
+                            <i class="fa fa-shopping-cart text-danger mr-2" style="font-size: 20px;"></i>
+                            <h4 class="mb-0 font-weight-bold" style="letter-spacing: -0.5px;">Shopping Cart</h4>
+                        </div>
+
+                        <div id="check-cart" style="display: {% if cart_items %}none{% else %}block{% endif %};" class="text-center py-5">
+                            <h5 class="text-muted">Your cart is currently empty.</h5>
+                            <a href="{% url 'marketplace' %}" class="btn btn-outline-danger mt-3" style="border-radius: 6px; font-weight: 700;">Explore Food</a>
+                        </div>
+
+                        <div class="menu-item-holder">
+                            <div id="menu-item-list-6272" class="menu-item-list">
+                                {% if cart_items %}
+                                <ul class="list-unstyled mb-0">
+                                    {% for cart in cart_items %}
+                                    <li id="cart-item-{{cart.id }}" class="cart-row py-3 border-bottom d-flex align-items-center" style="transition: background 0.2s;">
+                                        <!-- Image -->
+                                        <div class="cart-img-holder mr-3" style="flex: 0 0 80px;">
+                                            <a href="{{ cart.fooditem.image.url }}">
+                                                <img src="{{ cart.fooditem.image.url }}" alt="{{ cart.fooditem.food_title }}"
+                                                     style="width: 80px; height: 80px; object-fit: cover; border-radius: 10px; border: 1px solid #f0f0f0;">
+                                            </a>
+                                        </div>
+
+                                        <!-- Info -->
+                                        <div class="cart-info-holder" style="flex: 1;">
+                                            <div class="d-flex justify-content-between align-items-start">
+                                                <div>
+                                                    <h6 class="font-weight-bold mb-1" style="font-size: 16px; color: #111;">{{ cart.fooditem.food_title }}</h6>
+                                                    <p class="text-muted small mb-2" style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ cart.fooditem.description }}</p>
+                                                    <a href="{% url 'vendor_details' cart.fooditem.vendor.vendor_slug %}" 
+                                                       class="badge badge-light px-2 py-1" 
+                                                       style="color: #d32323; background: #fff5f5; font-weight: 700;">
+                                                        <i class="fa fa-store-alt mr-1"></i> {{ cart.fooditem.vendor }}
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Controls -->
+                                        <div class="cart-controls-holder ml-4 text-right" style="flex: 0 0 120px;">
+                                            <div class="d-inline-flex align-items-center bg-light px-2 py-1" style="border-radius: 25px; border: 1.5px solid #eee;">
+                                                <a href="#" class="decrease_cart text-color" 
+                                                   data-id="{{ cart.fooditem.id }}" 
+                                                   data-cart-id="{{cart.id}}" 
+                                                   data-url="{% url 'decrease_cart' cart.fooditem.id %}"
+                                                   style="width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; text-decoration: none;">
+                                                    <i class="icon-minus" style="font-size: 12px; font-weight: bold;"></i>
+                                                </a>
+
+                                                <label class="cart-qty mb-0 mx-2 font-weight-bold" id="qty-{{ cart.fooditem.id }}" style="min-width: 20px; text-align: center; font-size: 15px;">
+                                                    {% if cart.quantity %}{{ cart.quantity }}{% else %}0{% endif %}
+                                                </label>
+
+                                                <a href="#" class="add_to_cart text-color" 
+                                                   data-id="{{ cart.fooditem.id }}" 
+                                                   data-url="{% url 'add_to_cart' cart.fooditem.id %}"
+                                                   style="width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; text-decoration: none;">
+                                                    <i class="icon-plus4" style="font-size: 12px; font-weight: bold;"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Summary Section -->
+                <div class="col-lg-4 col-md-12 mt-4 mt-lg-0">
+                    <div class="sticky-top" style="top: 100px;">
+                        <div class="summary-card bg-white p-4" style="border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid #eee;">
+                            <h5 class="font-weight-bold mb-4 pb-2 border-bottom" style="letter-spacing: -0.5px;">Order Summary</h5>
+                            
+                            <div class="summary-details mt-3">
+                                <div class="d-flex justify-content-between mb-3" style="font-size: 15px;">
+                                    <span class="text-muted">Subtotal</span>
+                                    <span class="font-weight-bold">₹<span id="subtotal">{{ subtotal }}</span></span>
+                                </div>
+
+                                <hr class="my-4">
+
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <span class="font-weight-bold text-uppercase" style="font-size: 14px; letter-spacing: 1px;">Grand Total</span>
+                                    <span class="font-weight-bolder text-danger" style="font-size: 24px;">₹<span id="total">{{ grand_total }}</span></span>
+                                </div>
+
+                                <a href="{% url 'checkout' %}" class="btn btn-danger btn-block py-3 font-weight-bold text-uppercase shadow-sm" style="border-radius: 8px; letter-spacing: 1px; font-size: 15px; background: #d32323; border: none;">
+                                    Proceed to Checkout
+                                </a>
+                                
+                                <div class="text-center mt-3">
+                                    <p class="text-muted small mb-0"><i class="fa fa-lock mr-1"></i> Secure and encrypted payment</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div> <!-- row end -->
+        </div>
+    </div>
+</div>
+{% endblock %}

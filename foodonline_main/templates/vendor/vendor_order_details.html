@@ -1,0 +1,155 @@
+{% load static %}
+{% include 'v_base.html' %}
+
+<body style="background: #f8fafc; font-family: 'Inter', sans-serif;">
+
+<div class="container-fluid py-5">
+    <div class="row g-0">
+        <!-- Sidebar -->
+        <div class="col-lg-2 col-md-3">
+            {% include 'includes/v_sidebar.html' %}
+        </div>
+
+        <!-- RIGHT CONTENT -->
+        <div class="col-lg-10 col-md-9">
+            <div class="content px-4">
+
+                <!-- TOP BAR -->
+                <div class="d-flex justify-content-between align-items-center mb-5 pb-2 border-bottom"
+                    style="border-color: #e2e8f0 !important;">
+                    <div>
+                        <h3 class="font-weight-bold mb-1" style="color: #0f172a; letter-spacing: -1px;">Order Details</h3>
+                        <p class="text-muted mb-0" style="font-size: 14px;">Detailed overview of Order #{{ order.order_number }}</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button onclick="window.print()" class="btn btn-sm btn-light shadow-sm"
+                            style="border-radius: 10px; font-weight: 600; font-size: 11px; padding: 8px 15px;">
+                            <i class="fas fa-print mr-2"></i> Print Invoice
+                        </button>
+                        <a href="{% url 'vendor_orders' %}" class="btn btn-sm btn-dark shadow-sm ml-2"
+                            style="border-radius: 10px; font-weight: 600; font-size: 11px; padding: 8px 15px;">
+                            <i class="fa fa-angle-left mr-2"></i> Back to Orders
+                        </a>
+                    </div>
+                </div>
+
+                <!-- INVOICE CARD -->
+                <div class="card card-modern p-0 shadow-sm overflow-hidden border-0 mb-5">
+                    <div class="bg-white p-5">
+                        
+                        <!-- HEADER SECTION -->
+                        <div class="row mb-5">
+                            <div class="col-md-6">
+                                <img src="{% static 'logo/foodonlineLogo.png' %}" width="200" class="mb-4">
+                                <h5 class="font-weight-bold" style="color: #0f172a;">Customer Information</h5>
+                                <div class="text-muted small">
+                                    <p class="mb-1"><strong>Name:</strong> {{ order.name }}</p>
+                                    <p class="mb-1"><strong>Phone:</strong> {{ order.phone }}</p>
+                                    <p class="mb-1"><strong>Email:</strong> {{ order.email }}</p>
+                                    <p class="mb-1"><strong>Address:</strong> {{ order.address }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <div class="badge badge-lg mb-4" style="background: #f1f5f9; color: #475569; padding: 10px 20px; border-radius: 10px; font-weight: 700; font-size: 14px;">
+                                    ORDER STATUS: {{ order.status|upper }}
+                                </div>
+                                <h6 class="text-muted small text-uppercase font-weight-bold mb-1">Order Date</h6>
+                                <p class="font-weight-bold h5 mb-4" style="color: #0f172a;">{{ order.created_at|date:"d M Y, H:i" }}</p>
+                                
+                                <h6 class="text-muted small text-uppercase font-weight-bold mb-1">Order Number</h6>
+                                <p class="font-weight-bold h5 mb-0" style="color: #ef4444;">#{{ order.order_number }}</p>
+                            </div>
+                        </div>
+
+                        <!-- BILLING INFO GRID -->
+                        <div class="row mb-5 bg-light p-4 rounded-4 border mx-0 mt-5">
+                            <div class="col-md-4 text-center border-right">
+                                <span class="text-muted small text-uppercase font-weight-bold d-block mb-1">Payment Method</span>
+                                <span class="font-weight-bold" style="color: #0f172a;">{{ order.payment_method }}</span>
+                            </div>
+                            <div class="col-md-4 text-center border-right">
+                                <span class="text-muted small text-uppercase font-weight-bold d-block mb-1">Transaction ID</span>
+                                <span class="font-weight-bold" style="color: #0f172a;">{{ order.payment.transaction_id|default:"N/A" }}</span>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <span class="text-muted small text-uppercase font-weight-bold d-block mb-1">Payment Status</span>
+                                <span class="badge" style="background: #dcfce7; color: #166534; padding: 6px 12px; border-radius: 8px;">SUCCESS</span>
+                            </div>
+                        </div>
+
+                        <!-- ITEMS TABLE -->
+                        <div class="table-responsive mb-5">
+                            <table class="table table-clean">
+                                <thead>
+                                    <tr>
+                                        <th width="80">#</th>
+                                        <th width="80">Item</th>
+                                        <th>Name</th>
+                                        <th class="text-center">Qty</th>
+                                        <th class="text-right">Price</th>
+                                        <th class="text-right">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in ordered_food %}
+                                    <tr>
+                                        <td class="text-muted small">0{{ forloop.counter }}</td>
+                                        <td>
+                                            <img src="{{ item.fooditem.image.url }}" class="rounded shadow-sm" style="width: 45px; height: 45px; object-fit: cover;">
+                                        </td>
+                                        <td>
+                                            <div class="font-weight-bold" style="color: #0f172a;">{{ item.fooditem }}</div>
+                                            <div class="text-muted small">{{ item.fooditem.vendor.vendor_name }}</div>
+                                        </td>
+                                        <td class="text-center font-weight-bold">{{ item.quantity }}</td>
+                                        <td class="text-right">₹{{ item.fooditem.price }}</td>
+                                        <td class="text-right font-weight-bold" style="color: #0f172a;">₹{{ item.amount }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- TOTALS SECTION -->
+                        <div class="row justify-content-end">
+                            <div class="col-md-5">
+                                <div class="card bg-light border-0 p-4 rounded-4">
+                                    <div class="d-flex justify-content-between mb-3 pb-3 border-bottom" style="border-color: #e2e8f0 !important;">
+                                        <span class="text-muted font-weight-bold small text-uppercase">Subtotal</span>
+                                        <span class="font-weight-bold" style="color: #0f172a;">₹{{ subtotal }}</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <span class="text-muted font-weight-bold small text-uppercase d-block">Grand Total</span>
+                                            <span class="text-muted small">Tax and shipping included</span>
+                                        </div>
+                                        <span class="h3 font-weight-bold mb-0" style="color: #ef4444;">₹{{ grand_total }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- INVOICE FOOTER -->
+                        <div class="mt-5 pt-5 border-top">
+                            <div class="row align-items-center">
+                                <div class="col-md-6 border-right">
+                                    <p class="mb-1 text-muted small"><strong>Notes:</strong> Please ensure the order reaches the customer within the estimated time. Thank you for your service.</p>
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <div class="p-3 d-inline-block text-center rounded-4 border bg-light">
+                                        <img src="{% static 'images/paid.png' %}" width="120" style="opacity: 0.8; filter: grayscale(0.2);">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

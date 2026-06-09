@@ -1,0 +1,12 @@
+{% autoescape off %}
+
+Hi {{user.first_name}},
+
+{% if is_approved %}
+
+Congratulations! Your restaurtant  has been approved by our admin team.  --UniEats
+{% else %}
+We're sorry! You are not eligible  for publishing yours restaurtant menu .
+{% endif %}
+
+{% endautoescape %}

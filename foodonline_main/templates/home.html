@@ -1,0 +1,130 @@
+{% extends 'base.html'%}
+{% load static %}
+
+{% block content %}
+<!-- Main Section Start -->
+<div class="main-section">
+
+    <!-- Modern Hero Search Start -->
+    <div class="clean-hero shadow-sm" style="background-image: url('{% static 'extra-images/bg-image1.jpg' %}');">
+        <div class="container text-center">
+            <h1 class="clean-hero-title text-white">Order Food Easily Inside Your Campus</h1>
+            <p class="clean-hero-subtitle text-white">Skip the queue and enjoy hassle-free food pickup from your campus food court.</p>
+
+            <div class="glassmorphism-box mx-auto mt-4" style="max-width: 800px;">
+                <form method="GET" action="{% url 'search' %}">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col-lg-9 col-md-9 col-sm-12">
+                            <input type="text" name="rest_name" class="modern-search-input" placeholder="Search for restaurant or dish..." style="border-radius: 12px 0 0 12px; height: 60px;">
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <button type="submit" class="modern-btn-primary w-100" style="height: 60px; border-radius: 0 12px 12px 0; font-size: 18px;">Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Modern Hero Search End -->
+    
+    <!-- Top Restaurants Section Start -->
+    <div class="page-section nopadding cs-nomargin" style="margin-top:0; padding-top:80px; padding-bottom:40px; background:#f8fafc;">
+        <div class="container">
+            <div class="row">
+                {% if vendors %}
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center mb-5">
+                        <h2 class="clean-section-title">Top Restaurants</h2>
+                        <p class="clean-section-subtitle">Explore the best restaurants, bars, and cafés handpicked for you</p>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="d-flex flex-wrap justify-content-center align-items-center" style="gap: 30px;">
+                            {% for vend in vendors %}
+                                <div class="modern-logo-card">
+                                    {% if vend.user_profile.profile_picture %}
+                                        <a href="{% url 'vendor_details' vend.vendor_slug %}">
+                                            <img src="{{ vend.user_profile.profile_picture.url }}" alt="{{ vend.vendor_name }}">
+                                        </a>
+                                    {% else %}
+                                        <a href="#">
+                                            <img src="{% static 'images/users/black.jpg' %}" alt="No Image">
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                {% else %}
+                    <!-- No Restaurants Found -->
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="element-title align-center">
+                            <h2>Sorry for the inconvenience</h2>
+                            <p>Restaurants are not found in your area right now.</p>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <!-- Top Restaurants Section End -->
+
+    <!-- Popular Restaurants Start -->
+    <div class="page-section nopadding cs-nomargin" style="margin-top: 0px; padding-top: 60px; padding-bottom: 80px; background: #ffffff;">
+        <div class="container">
+            <div class="row">
+                {% if vendors %}
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center mb-5">
+                    <h2 class="clean-section-title">Most Popular Restaurants</h2>
+                    <p class="clean-section-subtitle">Discover what everyone is talking about</p>
+                </div>
+                
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="row">
+                        {% for vend in vendors %}
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-6 mb-4">
+                            <div class="modern-restaurant-card h-100">
+                                <div class="img-holder">
+                                    {% if vend.user_profile.profile_picture %}
+                                        <a href="{% if vend.vendor_slug %}{% url 'vendor_details' vend.vendor_slug %}{% else %}#{% endif %}">
+                                            <img src="{{ vend.user_profile.profile_picture.url }}" alt="">
+                                        </a>
+                                    {% else %}
+                                        <a href="#">
+                                            <img src="{% static 'images/users/black.jpg' %}" alt="">
+                                        </a>
+                                    {% endif %}
+                                    
+                                    {% if vend.is_open %}
+                                        <span class="modern-badge modern-badge-open">Open Now</span>
+                                    {% else %}
+                                        <span class="modern-badge modern-badge-closed">Closed</span>
+                                    {% endif %}
+                                </div>
+
+                                <div class="modern-card-content">
+                                    <h5 class="modern-card-title">
+                                        <a href="{% if vend.vendor_slug %}{% url 'vendor_details' vend.vendor_slug %}{% else %}#{% endif %}">
+                                            {{ vend.vendor_name }}
+                                        </a>
+                                    </h5>
+                                    
+                                                    <div class="modern-card-footer mt-auto">
+                                                        <span></span>
+                                                        <a href="{% if vend.vendor_slug %}{% url 'vendor_details' vend.vendor_slug %}{% else %}#{% endif %}" class="btn" style="color: #d32323; font-weight: 600; padding: 0;">Explore Foods <i class="fa fa-angle-right"></i></a>
+                                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}        
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <!-- Popular Restaurants End -->
+
+</div>
+<!-- Main Section End -->
+{% endblock content %}

@@ -1,0 +1,105 @@
+{% load static %}
+{% include 'v_base.html' %}
+
+<body style="background: #f8fafc; font-family: 'Inter', sans-serif;">
+
+<div class="container-fluid py-5">
+    <div class="row g-0">
+        <!-- Sidebar -->
+        <div class="col-lg-2 col-md-3">
+            {% include 'includes/v_sidebar.html' %}
+        </div>
+
+        <!-- RIGHT CONTENT -->
+        <div class="col-lg-10 col-md-9">
+            <div class="content px-4">
+
+                <!-- TOP BAR -->
+                <div class="d-flex justify-content-between align-items-center mb-5 pb-2 border-bottom"
+                    style="border-color: #e2e8f0 !important;">
+                    <div>
+                        <h3 class="font-weight-bold mb-1" style="color: #0f172a; letter-spacing: -1px;">Order History
+                        </h3>
+                        <p class="text-muted mb-0" style="font-size: 14px;">Review and manage all incoming restaurant
+                            orders</p>
+                    </div>
+                    <a href="{% url 'home' %}" class="btn btn-sm btn-light shadow-sm"
+                        style="border-radius: 10px; font-weight: 600; font-size: 12px; padding: 6px 15px;">
+                        <i class="fas fa-home mr-2"></i> Back to Home
+                    </a>
+                </div>
+
+                <!-- ORDER HISTORY TABLE -->
+                <div class="card card-modern p-4">
+                    <div class="section-title mb-4 pb-2 border-bottom d-flex justify-content-between align-items-center"
+                        style="border-color: #f8fafc !important;">
+                        <h5 class="font-weight-bold mb-0" style="color: #1e293b; letter-spacing: -0.5px;">Orders Overview
+                        </h5>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-clean w-100" id="datatable">
+                            <thead>
+                                <tr>
+                                    <th style="width: 15%">Order #</th>
+                                    <th style="width: 20%">Customer</th>
+                                    <th style="width: 15%">Phone</th>
+                                    <th style="width: 15%">Total</th>
+                                    <th style="width: 15%">Status</th>
+                                    <th style="width: 10%">Date</th>
+                                    <th style="width: 10%" class="text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in order %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'vendor_order_details' order.order_number %}"
+                                            class="text-decoration-none">
+                                            <span class="font-weight-bold"
+                                                style="color: #64748b;">#{{ order.order_number }}</span>
+                                        </a>
+                                    </td>
+                                    <td><span class="font-weight-bold" style="color: #0f172a;">{{ order.name }}</span>
+                                    </td>
+                                    <td class="text-muted small">{{ order.phone }}</td>
+                                    <td><span class="font-weight-bold"
+                                            style="color: #ef4444;">₹{{ order.get_total_by_vendor.grand_total }}</span></td>
+                                    <td>
+                                        {% if order.status == "Delivered" %}
+                                        <span class="badge" style="background: #f0fdf4; color: #166534; padding: 6px 14px; border-radius: 10px; font-weight: 700;">Delivered</span>
+                                        {% elif order.status == "New" %}
+                                        <span class="badge" style="background: #f1f5f9; color: #475569; padding: 6px 14px; border-radius: 10px; font-weight: 700;">Accepted</span>
+                                        {% elif order.status == "Accepted" %}
+                                        <span class="badge" style="background: #fffbeb; color: #92400e; padding: 6px 14px; border-radius: 10px; font-weight: 700;">Preparing</span>
+                                        {% elif order.status == "Completed" %}
+                                        <span class="badge" style="background: #eff6ff; color: #1e40af; padding: 6px 14px; border-radius: 10px; font-weight: 700;">Ready</span>
+                                        {% elif order.status == "Cancelled" %}
+                                        <span class="badge" style="background: #fef2f2; color: #991b1b; padding: 6px 14px; border-radius: 10px; font-weight: 700;">Cancelled</span>
+                                        {% else %}
+                                        <span class="badge" style="background: #f1f5f9; color: #475569; padding: 6px 14px; border-radius: 10px; font-weight: 700;">{{ order.status }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-muted small text-nowrap">{{ order.created_at|date:"d M Y" }}</td>
+                                    <td class="text-right">
+                                        <a href="{% url 'vendor_order_details' order.order_number %}"
+                                            class="btn btn-sm btn-dark shadow-sm"
+                                            style="border-radius: 10px; font-size: 10px; font-weight: 700; padding: 6px 15px;">
+                                            Details
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

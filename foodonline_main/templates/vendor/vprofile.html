@@ -1,0 +1,205 @@
+{% load static %}
+{% include 'v_base.html'%}
+
+<body>
+
+<div class="container-fluid py-5">
+    <div class="row g-0">
+        <!-- Sidebar -->
+        <div class="col-lg-2 col-md-3">
+            {% include 'includes/v_sidebar.html' %}
+        </div>
+
+        <!-- Right Content -->
+        <div class="col-lg-10 col-md-9">
+            <div class="content px-4">
+
+                <!-- Top Bar -->
+                <div class="d-flex justify-content-between align-items-center mb-5 pb-2 border-bottom"
+                    style="border-color: #e2e8f0 !important;">
+                    <div>
+                        <h3 class="font-weight-bold mb-1" style="color: #0f172a; letter-spacing: -1px;">Manage Your
+                            Restaurant</h3>
+                        <p class="text-muted mb-0" style="font-size: 14px;">Update your restaurant profile and contact
+                            details</p>
+                    </div>
+                    <a href="{% url 'home' %}" class="btn btn-sm btn-light shadow-sm"
+                        style="border-radius: 10px; font-weight: 600; font-size: 12px; padding: 6px 15px;">
+                        <i class="fas fa-home mr-2"></i> Back to Home
+                    </a>
+                </div>
+
+                <!-- Content Card -->
+                <div class="card card-modern p-5 mb-4">
+
+                    <form action="{% url 'vprofile' %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="row g-4">
+                            <!-- Image Upload Sections -->
+                            <div class="col-md-4">
+                                <div class="upload-card p-3 border rounded-4 text-center mb-4">
+                                    <label class="d-block font-weight-bold small text-uppercase mb-3" style="letter-spacing: 0.5px;">Update Logo</label>
+                                    <img class="img-thumbnail rounded-circle mb-3" style="width: 120px; height: 120px; object-fit: cover;"
+                                        src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}{% static 'images/default.jpg' %}{% endif %}">
+                                    <div class="custom-file-upload">
+                                        {{ profile_form.profile_picture }}
+                                    </div>
+                                    {% if profile_form.profile_picture.errors %}
+                                        <div class="text-danger small mt-2">{{ profile_form.profile_picture.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="upload-card p-3 border rounded-4 text-center mb-4">
+                                    <label class="d-block font-weight-bold small text-uppercase mb-3" style="letter-spacing: 0.5px;">Update Cover Photo</label>
+                                    <img class="img-thumbnail rounded-4 mb-3" style="width: 100%; height: 120px; object-fit: cover;"
+                                        src="{% if profile.cover_photo %}{{ profile.cover_photo.url }}{% else %}{% static 'images/cover-photo-1.PNG' %}{% endif %}">
+                                    <div class="custom-file-upload">
+                                        {{ profile_form.cover_photo }}
+                                    </div>
+                                    {% if profile_form.cover_photo.errors %}
+                                        <div class="text-danger small mt-2">{{ profile_form.cover_photo.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="upload-card p-3 border rounded-4 text-center mb-4">
+                                    <label class="d-block font-weight-bold small text-uppercase mb-3" style="letter-spacing: 0.5px;">Update License</label>
+                                    <img class="img-thumbnail rounded-4 mb-3" style="width: 100%; height: 120px; object-fit: cover;"
+                                        src="{% if vendor_get.vendor_licence %}{{ vendor_get.vendor_licence.url }}{% else %}{% static 'images/rice-bowl.jpg' %}{% endif %}">
+                                    <div class="custom-file-upload">
+                                        {{ vendor_form.vendor_licence }}
+                                    </div>
+                                    {% if vendor_form.vendor_licence.errors %}
+                                        <div class="text-danger small mt-2">{{ vendor_form.vendor_licence.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <!-- Basic Info -->
+                            <div class="col-md-12 mt-4">
+                                <h6 class="font-weight-bold mb-3 pb-2 border-bottom">Restaurant Details</h6>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="form-label-small">Restaurant Name *</label>
+                                    {{ vendor_form.vendor_name }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group position-relative">
+                                    <label class="form-label-small">Address</label>
+                                    {{ profile_form.address }}
+                                    <small class="text-muted position-absolute" style="right: 0; top: 0;">powered by Mapbox</small>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label-small">City</label>
+                                    {{ profile_form.city }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label-small">State</label>
+                                    {{ profile_form.state }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label-small">Country</label>
+                                    {{ profile_form.country }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label-small">Pin Code</label>
+                                    {{ profile_form.pin_code }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label-small">Latitude</label>
+                                    {{ profile_form.latitude }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label-small">Longitude</label>
+                                    {{ profile_form.longitude }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 mt-5">
+                                <button type="submit" class="btn btn-danger font-weight-bold"
+                                    style="border-radius: 10px; background: #ef4444; border: none; padding: 10px 25px; font-size: 13px; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.12);">
+                                    Update Restaurant
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    .form-label-small {
+        display: block;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #64748b;
+        margin-bottom: 8px;
+    }
+
+    .form-group input {
+        width: 100%;
+        border-radius: 12px;
+        padding: 12px 16px;
+        border: 1px solid #e2e8f0;
+        background: #f8fafc;
+        font-size: 14px;
+        font-weight: 500;
+        color: #0f172a;
+        transition: all 0.2s;
+    }
+
+    .form-group input:focus {
+        border-color: #ef4444;
+        background: #fff;
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.05);
+    }
+    
+    .custom-file-upload input[type="file"] {
+        font-size: 12px;
+        background: transparent;
+        border: none;
+        padding: 0;
+    }
+</style>
+
+<!-- Custom JS -->
+<script src="{% static 'js/modernizr.js' %}"></script>
+<script src="{% static 'js/bootstrap.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
+
+</body>
+
+</html>

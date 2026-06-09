@@ -1,0 +1,156 @@
+{% load static %}
+{% include 'v_base.html' %}
+
+<body style="background: #f8fafc; font-family: 'Inter', sans-serif;">
+
+<div class="container-fluid py-5">
+    <div class="row g-0">
+        <!-- Sidebar -->
+        <div class="col-lg-2 col-md-3">
+            {% include 'includes/v_sidebar.html' %}
+        </div>
+
+        <!-- RIGHT CONTENT -->
+        <div class="col-lg-10 col-md-9">
+            <div class="content px-4">
+
+                <!-- TOP BAR -->
+                <div class="d-flex justify-content-between align-items-center mb-5 pb-2 border-bottom"
+                    style="border-color: #e2e8f0 !important;">
+                    <div>
+                        <h3 class="font-weight-bold mb-1" style="color: #0f172a; letter-spacing: -1px;">Opening Hours</h3>
+                        <p class="text-muted mb-0" style="font-size: 14px;">Define when your restaurant is open for orders
+                        </p>
+                    </div>
+                    <a href="{% url 'home' %}" class="btn btn-sm btn-light shadow-sm"
+                        style="border-radius: 10px; font-weight: 600; font-size: 12px; padding: 6px 15px;">
+                        <i class="fas fa-home mr-2"></i> Back to Home
+                    </a>
+                </div>
+
+                <!-- MAIN CARD -->
+                <div class="card card-modern p-4 mb-4">
+                    <div class="section-title mb-4 pb-2 border-bottom" style="border-color: #f8fafc !important;">
+                        <h5 class="font-weight-bold mb-0" style="color: #1e293b; letter-spacing: -0.5px;">Manage Hours</h5>
+                    </div>
+
+                    <!-- OPENING HOURS LIST -->
+                    <div class="table-responsive">
+                        <table class="table table-clean w-100">
+                            <thead>
+                                <tr>
+                                    <th>Day</th>
+                                    <th>Operating Hours</th>
+                                    <th class="text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for hour in opening_hours %}
+                                <tr id="hour-{{ hour.id }}">
+                                    <td><span class="font-weight-bold" style="color: #0f172a;">{{ hour }}</span></td>
+                                    <td>
+                                        {% if hour.is_closed %}
+                                        <span class="badge"
+                                            style="background: #fff1f2; color: #e11d48; padding: 6px 12px; border-radius: 8px; font-weight: 700;">Closed</span>
+                                        {% else %}
+                                        <span class="font-weight-bold" style="color: #64748b;">{{ hour.from_hour }} – 
+                                            {{ hour.to_hour }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-right">
+                                        <a href="#" class="btn-remove-hour remove_hour"
+                                            data-url="{% url 'removing_opening_hour' hour.id %}"
+                                            style="color: #ef4444; font-weight: 700; font-size: 12px; text-decoration: none;">
+                                            <i class="fas fa-times-circle mr-1"></i> Remove
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- ADD HOURS FORM -->
+                    <div class="mt-5 pt-4 border-top" style="border-color: #f8fafc !important;">
+                        <h6 class="font-weight-bold mb-4" style="color: #1e293b; font-size: 14px;">Add New Time Slot</h6>
+                        <form id="opening_hours" class="premium-form">
+                            {% csrf_token %}
+                            <div class="row g-3 align-items-end">
+                                <div class="col-md-3">
+                                    <label class="form-label-small">Day</label>
+                                    {{ form.day }}
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label-small">From</label>
+                                    {{ form.from_hour }}
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label-small">To</label>
+                                    {{ form.to_hour }}
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label-small">Holiday?</label>
+                                    <div class="d-flex align-items-center p-2 rounded"
+                                        style="background: #f8fafc; border: 1px solid #f1f5f9; height: 42px;">
+                                        {{ form.is_closed }}
+                                        <span class="ml-2 small font-weight-bold text-muted" style="font-size: 11px;">SET AS
+                                            CLOSED</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-danger w-100 add_hour font-weight-bold"
+                                        data-url="{% url 'add_hour' %}"
+                                        style="height: 42px; border-radius: 10px; background: #ef4444; border: none; font-size: 13px; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.12);">
+                                        Add
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-label-small {
+        display: block;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #64748b;
+        margin-bottom: 8px;
+    }
+
+    .premium-form select,
+    .premium-form input {
+        width: 100%;
+        border-radius: 12px;
+        padding: 10px 14px;
+        border: 1px solid #f1f5f9;
+        background: #f8fafc !important;
+        font-size: 13px;
+        font-weight: 600;
+        color: #1e293b;
+        transition: all 0.2s;
+    }
+
+    .premium-form select:focus {
+        border-color: #ef4444;
+        background: #fff !important;
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.05);
+    }
+
+    .btn-remove-hour:hover {
+        opacity: 0.7;
+        transform: scale(0.95);
+    }
+</style>
+
+</body>
+
+</html>
