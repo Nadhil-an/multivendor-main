@@ -39,12 +39,27 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
+        stage('Docker Hub Login') {
             steps {
-                sh '''
-                docker compose down
-                docker compose up -d --build
-                '''
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                }
+            }
+        }
+
+        stage('Tag Image') {
+            steps {
+                sh 'docker tag foodonline-ci nadilan/foodonline-ci:latest'
+            }
+        }
+
+        stage('Push Image') {
+            steps {
+                sh 'docker push nadilan/foodonline-ci:latest'
             }
         }
     }
