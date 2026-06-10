@@ -20,6 +20,18 @@ pipeline {
                 sh 'docker images | grep foodonline-ci'
             }
         }
+
+        stage('Django Check') {
+            steps {
+                sh 'docker run --rm foodonline-ci python manage.py check'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                sh 'docker run --rm foodonline-ci python manage.py test'
+            }
+        }
     }
 
     post {
