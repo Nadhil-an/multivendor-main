@@ -21,6 +21,12 @@ pipeline {
             }
         }
 
+        stage('Setup Environment') {
+            steps {
+                sh 'cp .env.example .env.dev'
+            }
+        }
+
         stage('Django Check') {
             steps {
                  sh 'docker run --rm --env-file .env.dev foodonline-ci python manage.py check'
